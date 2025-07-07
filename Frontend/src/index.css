@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-white text-pathlo;
+}
+
+img {
+  @apply max-w-full;
+}
+
+button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
