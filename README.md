@@ -2,7 +2,7 @@
 
 A comprehensive, enterprise-grade plant disease detection application built with modern web technologies. PlantTech combines advanced AI/ML capabilities with a beautiful, responsive user interface to provide accurate plant health analysis for farmers, gardeners, and agricultural professionals.
 
-![PlantTech Logo](plantech_ui/public/logo-01.png)
+![PlantTech Logo](frontend/public/logo-01.png)
 
 ## 🚀 Quick Start
 
