@@ -1,0 +1,60 @@
+# Development Docker Compose (Optional)
+# docker-compose.dev.yml
+version: '3.8'
+
+services:
+  database:
+    image: alpine:latest
+    command: tail -f /dev/null
+    volumes:
+      - db_data:/data
+      - uploads_data:/uploads
+    networks:
+      - plantech-network
+
+  backend:
+    build:
+      context: ./plantech_backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./plantech_backend:/app
+      - db_data:/app/database
+      - uploads_data:/app/uploads
+      - ./plantech_backend/plant_model_5Classes.tflite:/app/plant_model_5Classes.tflite
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - DATABASE_PATH=/app/database/predictions.db
+    command: python backend_app.py
+    # User registration and login are fully supported; all users are stored in the database (see db_data volume)
+    depends_on:
+      - database
+    networks:
+      - plantech-network
+
+  frontend:
+    build:
+      context: ./plantech_ui
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./plantech_ui:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:5001
+    command: npm run dev -- --host 0.0.0.0
+    networks:
+      - plantech-network
+
+volumes:
+  db_data:
+  uploads_data:
+
+networks:
+  plantech-network:
+    driver: bridge
